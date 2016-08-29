@@ -1,7 +1,11 @@
+import java.io.*;
 import java.util.Random;
 
 /**
  * Created by Sushant on 14-Aug-16.
+ * Binary Search Tree
+ * Insert, Search
+ * Using File IO
  */
 
 /* Structure of Node */
@@ -35,21 +39,28 @@ public class bTree {
         Formation of Tree, Insertion of values
         and Search for data.
          */
-
-        //Creating the root node.
-        bTreeNode root = new bTreeNode(500000);
+        String in;
+        String infile="inp.txt";
+        String outFile="out.txt";
+        bTreeNode root = new bTreeNode(50000); //Creating the root node.
         bTree tree = new bTree();
-        Random r = new Random();
-        /* Inserting 10 Million Integers into the Tree */
-        for(int i = 0;i<10000000;i++){
-            tree.insert(root,r.nextInt(100000000)+1);
+        tree.createInput(infile,100000,10000);  /* Creating Input from file */
+        /* Inserting 10000 Integers into the Tree */
+        try {
+            FileReader f =new FileReader(infile);
+            BufferedReader bR = new BufferedReader(f);
+            while((in = bR.readLine()) != null){
+                tree.insert(root,Integer.parseInt(in));
+            }
         }
-        tree.insert(root,15);
-        System.out.println("Printing out the bTree");
-        /*printing the tree in inorder */
-        tree.printInOrder(root);
-        /*Searching for a number */
-        tree.search(15,root);
+        catch(IOException E){
+            System.out.println(E.toString());
+        }
+
+        System.out.println("Writing the tree to a file!");
+        tree.printInOrder(root);  //Print the tree to stdout
+        tree.printTree(root,outFile); /*printing the tree in inorder */
+        tree.search(15,root); /*Searching for a number */
     }
 
     public void insert(bTreeNode node, int value) {
@@ -80,7 +91,7 @@ public class bTree {
 
     public void printInOrder(bTreeNode root){
         /*
-        Display the tree in Inorder Format (Left, Root, Right)
+        Display the tree in Inorder Format (Left, Root, Right) to System.out
         (Recursive Function)
         root: type-bTreeNode, root node of the tree
 
@@ -93,7 +104,26 @@ public class bTree {
         }
     }
 
-    public void search(int data, bTreeNode root){
+    public void printInOrder(bTreeNode root, BufferedWriter bW) throws IOException{
+        /*
+        Display the tree in Inorder Format (Left, Root, Right)
+        (Recursive Function)
+        root: type-bTreeNode, root node of the tree
+        bw: BufferedWriter, to write output to a file
+        returns: void
+         */
+        if (root != null) {
+
+            printInOrder(root.left,bW);
+            bW.write(String.valueOf(root.data));
+            bW.newLine();
+            bW.flush();
+            printInOrder(root.right,bW);
+        }
+
+    }
+
+    public void search(int data, bTreeNode root) {
         /*
         Searches for a given element in the specified tree, via the root.
 
@@ -103,20 +133,59 @@ public class bTree {
         returns: void.
          */
 
-        if(root == null){
+        if (root == null) {
             System.out.println("Tree Empty! or data not found");
+        } else if (root.data == data) {
+            System.out.println(data + " Found!!");
+        } else if (data < root.data) {
+            search(data, root.left);
+        } else if (data > root.data) {
+            search(data, root.right);
         }
-        else if(root.data == data){
-            System.out.println(data+" Found!!");
+    }
+
+    public void createInput(String fileName,int maxNumber, int numberOfNodes){
+        /*
+        Function to generate input, i.e. integers to be inserted into the tree
+
+        fileName: String, filename to store the input for the tree.
+        maxNumber: int, maximum number to be inserted into the tree.
+        numberOfNode: int, number of integers to be generated to be inserted in the tree.
+
+        returns: void
+        */
+        Random r = new Random();
+        try{
+            FileWriter f = new FileWriter(fileName);
+            BufferedWriter bW = new BufferedWriter(f);
+            for(int i = 0;i<numberOfNodes;i++){
+                bW.write(String.valueOf(r.nextInt(maxNumber)+1));
+                bW.newLine();
+                bW.flush();
+            }
         }
-        else if(data < root.data){
-            search(data,root.left);
+        catch(IOException E ){
+            System.out.println(E.toString());
         }
-        else if(data > root.data){
-            search(data,root.right);
+    }
+
+    public void printTree(bTreeNode root, String outfile){
+        /*
+        prints the tree to a file
+
+        root: bTreeNode, identifies the root to a file.
+        outfile: String, name of the output file.
+
+        returns: void
+         */
+
+        try{
+            FileWriter fw = new FileWriter(outfile);
+            BufferedWriter bR = new BufferedWriter(fw);
+            printInOrder(root, bR);
+        }
+        catch (IOException E){
+            System.out.println(E.toString());
         }
     }
 }
-
-
-
