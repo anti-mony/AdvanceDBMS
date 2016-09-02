@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.Random;
 
 /**
- * Created by Sushant on 14-Aug-16.
+ * Created by Sushant,Pragya & Jaison on 14-Aug-16.
  * Binary Search Tree
  * Insert, Search
  * Using File IO
