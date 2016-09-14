@@ -2,11 +2,11 @@ import java.io.*;
 import java.util.Random;
 
 /**
- * Created by Sushant, Pragya & Jaison on 14-Aug-16.
+ * Created by Sushant on 14-Aug-16.
  * Binary Search Tree
  * Insert, Search
  * Using File IO
- **/
+ */
 
 /* Structure of Node */
 class bTreeNode{
@@ -23,7 +23,7 @@ class bTreeNode{
     bTreeNode right;
 
     /*Constructor, adds value to a new node */
-    protected bTreeNode(int data) {
+    public bTreeNode(int data) {
         this.data = data;
         /* Sets the next left and right node to NULL*/
         this.left = null;
@@ -63,7 +63,7 @@ public class bTree {
         tree.search(15,root); /*Searching for a number */
     }
 
-    protected void insert(bTreeNode node, int value) {
+    public void insert(bTreeNode node, int value) {
         /* Inserts a new node into the tree
 
             node: type-bTreeNode, generally root of the tree
@@ -89,7 +89,7 @@ public class bTree {
         }
     }
 
-    protected void printInOrder(bTreeNode root) {
+    public void printInOrder(bTreeNode root){
         /*
         Display the tree in Inorder Format (Left, Root, Right) to System.out
         (Recursive Function)
@@ -104,7 +104,7 @@ public class bTree {
         }
     }
 
-    protected void printInOrder(bTreeNode root, BufferedWriter bW) throws IOException {
+    public void printInOrder(bTreeNode root, BufferedWriter bW) throws IOException{
         /*
         Display the tree in Inorder Format (Left, Root, Right)
         (Recursive Function)
@@ -123,7 +123,7 @@ public class bTree {
 
     }
 
-    protected void search(int data, bTreeNode root) {
+    public void search(int data, bTreeNode root) {
         /*
         Searches for a given element in the specified tree, via the root.
 
@@ -144,7 +144,7 @@ public class bTree {
         }
     }
 
-    protected void createInput(String fileName, int maxNumber, int numberOfNodes) {
+    public void createInput(String fileName,int maxNumber, int numberOfNodes){
         /*
         Function to generate input, i.e. integers to be inserted into the tree
 
@@ -169,7 +169,7 @@ public class bTree {
         }
     }
 
-    protected void printTree(bTreeNode root, String outfile) {
+    public void printTree(bTreeNode root, String outfile){
         /*
         prints the tree to a file
 
