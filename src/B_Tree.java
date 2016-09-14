@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -7,16 +10,13 @@ import java.util.Scanner;
  */
 class BNode {
     static int t;  //variable to determine order of tree
+    protected BNode parent;  //parent of current node.
     int count; // number of keys in node
     int key[];  // array of key values
     BNode child[]; //array of references
     boolean leaf; //is node a leaf or not
-    BNode parent;  //parent of current node.
 
-    public BNode() {
-    }
-
-    public BNode(int t, BNode parent) {
+    BNode(int t, BNode parent) {
         BNode.t = t;  //assign size
         this.parent = parent; //assign parent
         key = new int[2 * t - 1];  // array of proper size
@@ -114,6 +114,9 @@ class BTree {
 
 
     public void nonfullInsert(BNode x, int key) {
+        if (search(x, key) != null) {
+            return;
+        }
         int i = x.count; //i is number of keys in node x
         if (x.leaf) {
             while (i >= 1 && key < x.key[i - 1])//here find spot to put key.
@@ -145,6 +148,10 @@ class BTree {
 
     public void insert(BTree t, int key) {
         BNode r = t.root;//this method finds the node to be inserted as
+        if (search(r, key) != null) {
+            return;
+        }
+
         //it goes through this starting at root node.
         if (r.count == 2 * order - 1)//if is full
         {
@@ -163,7 +170,7 @@ class BTree {
 
     public void print(BNode n) {
         for (int i = 0; i < n.count; i++) {
-            System.out.print(n.getValue(i) + " ");//this part prints root node
+            System.out.println(n.getValue(i) + " ");//this part prints root node
         }
 
         if (!n.leaf)//this is called when root is not leaf;
@@ -209,6 +216,7 @@ class BTree {
 
 public class B_Tree {
     public static void main(String[] args) {
+        String in;
         Scanner input = new Scanner(System.in);
         int n, n2, temp;
         System.out.print("Enter the t of the Tree?  ");
@@ -220,6 +228,7 @@ public class B_Tree {
         }
         BTree tree = new BTree(n);//  B-Tree Tree with order  N is created.
 
+        /*
         // Initial Values are added to the Tree.. The user and Input any number of Values.
         System.out.print("\n How many values do you want to enter?:  ");
         n2 = input.nextInt();
@@ -231,7 +240,20 @@ public class B_Tree {
             tree.insert(tree, temp);
         }
         int choice, k;// Variables used to control the Repeated loop of the MENU.
+        */
+        try {
+            FileReader f = new FileReader("inp.txt");
+            BufferedReader bR = new BufferedReader(f);
+            while ((in = bR.readLine()) != null) {
+                tree.insert(tree, Integer.parseInt(in));
+            }
+        } catch (IOException E) {
+            System.out.println(E.toString());
+        }
 
+        tree.print(tree.root);
+
+        /*
         boolean flag;
         flag = true;
         System.out.println("\tM\tE\tN\tU\n");
@@ -306,6 +328,6 @@ public class B_Tree {
                         break;
                 }//end of switch block
             }//end of else block
-        }//end while(flag)//
+        }//end while(flag)//*/
     }
 }

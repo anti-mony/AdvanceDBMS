@@ -9,6 +9,9 @@ import java.util.Random;
  * Writes the specified number of integers to a file.
  */
 public class inputCreator {
+    public static void main(String[] args) {
+        createInput("inp.txt", 100000, 10000);
+    }
     public static void createInput(String fileName, int maxNumber, int numberOfNodes) {
         /*
         Function to generate input, i.e. integers to be inserted into the tree
