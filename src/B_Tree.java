@@ -200,40 +200,45 @@ class BTree {
 
 public class B_Tree {
     public static void main(String[] args) {
-        inputHelp iH = new inputHelp();
+        inputHelp iH = new inputHelp();  //Helper Class to take input from user
         String in;
         BTree tree = new BTree(iH.orderInput());//  B-Tree Tree with order  N is created.
 
         try {
-            FileReader f = new FileReader("inp.txt");
+            FileReader f = new FileReader("inp.txt");        //Reading input from File
             BufferedReader bR = new BufferedReader(f);
             while ((in = bR.readLine()) != null) {
-                tree.insert(tree, Integer.parseInt(in));
+                tree.insert(tree, Integer.parseInt(in));        //Inserting the values into the BTree
             }
         } catch (IOException E) {
             System.out.println(E.toString());
         }
-        tree.print(tree.root);
+        tree.print(tree.root);          //Printing the Tree to console
     }
 }
 
 class inputHelp {
 
     int orderInput() {
+        /*
+        * To take order of tree as input
+        * No, parameters
+        * returns: int, order of B-Tree
+        */
         int number;
         try (Scanner inp = new Scanner(System.in)) {
             while (true) {
                 try {
                     System.out.println("Enter the order of tree");
-                    number = inp.nextInt();
+                    number = inp.nextInt();                         //Asking for order (integer)
                     if (number <= 2)
-                        throw new orderTooSmallException("Enter a number greater than 2");
+                        throw new orderTooSmallException("Enter a number greater than 2");          //Order should not be less than 2
                     return number;
-                } catch (InputMismatchException E) {
+                } catch (InputMismatchException E) {         //Checking for integer input
                     System.out.println(E.toString());
                     System.out.print(" --> Please Enter an integer <--");
                     inp.next();
-                } catch (orderTooSmallException E) {
+                } catch (orderTooSmallException E) {        // Order too small
                     System.out.println(E.toString());
                 }
             }
@@ -246,6 +251,9 @@ class inputHelp {
     }
 
     private class orderTooSmallException extends Exception {
+        /*
+        Custom Exception to check for inputs less than or equal to 2
+        */
         orderTooSmallException(String s) {
             super(s);
         }
