@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -146,7 +147,7 @@ class BTree {
         }
     }
 
-    public void insert(BTree t, int key) {
+    void insert(BTree t, int key) {
         BNode r = t.root;//this method finds the node to be inserted as
         if (search(r, key) != null) {
             return;
@@ -168,7 +169,7 @@ class BTree {
     }
 
 
-    public void print(BNode n) {
+    void print(BNode n) {
         for (int i = 0; i < n.count; i++) {
             System.out.println(n.getValue(i) + " ");//this part prints root node
         }
@@ -187,7 +188,7 @@ class BTree {
     }
 
     public void SearchPrintNode(BTree T, int x) {
-        BNode temp = new BNode(order, null);
+        BNode temp;
         temp = search(T.root, x);
         if (temp == null) {
             System.out.println("The Key does not exist in this tree");
@@ -195,52 +196,14 @@ class BTree {
             print(temp);
         }
     }
-
-    public void deleteKey(BTree t, int key) {
-        BNode temp = new BNode(order, null);//temp Bnode
-        temp = search(t.root, key);//call of search method on tree for key
-        if (temp.leaf && temp.count > order - 1) {
-            int i = 0;
-            while (key > temp.getValue(i)) {
-                i++;
-            }
-            for (int j = i; j < 2 * order - 2; j++) {
-                temp.key[j] = temp.getValue(j + 1);
-            }
-            temp.count--;
-        } else {
-            System.out.println("This node is either not a leaf or has less than order - 1 keys.");
-        }
-    }
 }
 
 public class B_Tree {
     public static void main(String[] args) {
+        inputHelp iH = new inputHelp();
         String in;
-        Scanner input = new Scanner(System.in);
-        int n, n2, temp;
-        System.out.print("Enter the t of the Tree?  ");
-        n = input.nextInt();
+        BTree tree = new BTree(iH.orderInput());//  B-Tree Tree with order  N is created.
 
-        while (n < 2) {
-            System.out.print("Please enter a integer greater than 1 : ");
-            n = input.nextInt();//  User inputs the order of Tree and is assinged to N.
-        }
-        BTree tree = new BTree(n);//  B-Tree Tree with order  N is created.
-
-        /*
-        // Initial Values are added to the Tree.. The user and Input any number of Values.
-        System.out.print("\n How many values do you want to enter?:  ");
-        n2 = input.nextInt();
-
-        for (int i = 0; i < n2; i++) {
-            System.out.print("\nEnter Value:");
-            System.out.println(i + 1);
-            temp = input.nextInt();
-            tree.insert(tree, temp);
-        }
-        int choice, k;// Variables used to control the Repeated loop of the MENU.
-        */
         try {
             FileReader f = new FileReader("inp.txt");
             BufferedReader bR = new BufferedReader(f);
@@ -250,84 +213,41 @@ public class B_Tree {
         } catch (IOException E) {
             System.out.println(E.toString());
         }
-
         tree.print(tree.root);
+    }
+}
 
-        /*
-        boolean flag;
-        flag = true;
-        System.out.println("\tM\tE\tN\tU\n");
-        System.out.println("1. Enter more values in a Tree");
-        System.out.println("2. Print the whole  Tree in preorder");
-        System.out.println("3. Search for a Key and print the Node it belongs to");
-        System.out.println("4. Delete a key from the leaf");
-        System.out.println("5. Exit");
+class inputHelp {
 
-        while (flag)// This While loop runs as long as the user enters anything other than a 5.
-        {
+    int orderInput() {
+        int number;
+        try (Scanner inp = new Scanner(System.in)) {
+            while (true) {
+                try {
+                    System.out.println("Enter the order of tree");
+                    number = inp.nextInt();
+                    if (number <= 2)
+                        throw new orderTooSmallException("Enter a number greater than 2");
+                    return number;
+                } catch (InputMismatchException E) {
+                    System.out.println(E.toString());
+                    System.out.print(" --> Please Enter an integer <--");
+                    inp.next();
+                } catch (orderTooSmallException E) {
+                    System.out.println(E.toString());
+                }
+            }
+        } catch (Exception E) {
+            System.out.println(E.toString());
+            System.out.println("Scanner fail, retrying");
+            number = orderInput();
+        }
+        return number;
+    }
 
-
-            System.out.print("\nPlease enter your choice::");
-            choice = input.nextInt();
-            if (choice == 5) {
-                System.out.printf("The program is exiting...,\n"
-                        + "Thank you for using B-Tree implementation in Java\n"
-                        + " Authors: Jeremy Phelps and Krish Unnikannan");
-                System.exit(0);
-                flag = false;
-                break;
-            } else {
-                switch (choice) {
-                    case 1: //If the User Enters 1 this case is executed and
-                        //its function is to Enter more values in a Tree.
-
-                        System.out.print("How many values do you want to enter?:");
-                        n2 = input.nextInt();
-
-                        for (int i = 0; i < n2; i++) {
-                            System.out.print("\nEnter Value: ");
-                            System.out.println(i + 1);
-                            temp = input.nextInt();
-                            tree.insert(tree, temp);
-                        }
-                        break;
-
-                    case 2: //If the User Enters 2 this case is executed and
-                        //its function is to Print the whole  Tree in preorder format.
-
-                        tree.print(tree.root);
-                        System.out.println();
-                        break;
-
-                    case 3: //If the User Enters 3 this case is executed and
-                        //its function is to Delete a key from the leaf
-
-                        System.out.println("What is the key you wish to search for:");
-                        int key2 = input.nextInt();
-                        tree.SearchPrintNode(tree, key2);
-
-                        break;
-                    case 4: //If User Enters 4, this case is executed
-                        //Its Function is to search for a Key and print the Node it belongs to
-
-                        System.out.println("Enter a key to be deleted:");
-                        int key = input.nextInt();
-                        tree.deleteKey(tree, key);
-                        System.out.println("Here is the tree printed in preorder after delete");
-                        tree.print(tree.root);
-                        break;
-
-                    case 5: //If the User Enters 5, this case is executed and
-                        //its function is to Exit
-
-                        System.exit(0);
-                        break;
-
-                    default: // If the User enters a wrong choice, then this case is executed.
-                        System.out.println("\nPlease enter a valid choice of 1,2,3 or 4\n");
-                        break;
-                }//end of switch block
-            }//end of else block
-        }//end while(flag)//*/
+    private class orderTooSmallException extends Exception {
+        orderTooSmallException(String s) {
+            super(s);
+        }
     }
 }
