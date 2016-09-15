@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -10,70 +8,73 @@ import java.util.Scanner;
  * Insertion and Search (integers)
  */
 class BNode {
-    static int t;  //variable to determine order of tree
-    protected BNode parent;  //parent of current node.
-    int count; // number of keys in node
-    int key[];  // array of key values
-    BNode child[]; //array of references
-    boolean leaf; //is node a leaf or not
+    private static int t;  //determining the order of tree
+    private BNode parent;  //parent of current node.
+    int count; // number of values in node
+    int key[];  // array of values
+    BNode child[]; //array to store references
+    boolean leaf; //leaf check
 
     BNode(int t, BNode parent) {
-        BNode.t = t;  //assign size
-        this.parent = parent; //assign parent
-        key = new int[2 * t - 1];  // array of proper size
-        child = new BNode[2 * t]; // array of refs proper size
-        leaf = true; // everynode is leaf at first;
-        count = 0; //until we add keys later.
+        BNode.t = t;  //assigning size
+        this.parent = parent; //assigning parent
+        key = new int[2 * t - 1];  // Max Size can be 2B -1
+        child = new BNode[2 * t]; // Refrence Array
+        leaf = true; // Default Leaf
+        count = 0; //Default number of values 0.
     }
 
-    public int getValue(int index) {
+    int getValue(int index) {
         return key[index];
     }
 
-    public BNode getChild(int index) {
+    BNode getChild(int index) {
         return child[index];
     }
 }
 
 class BTree {
 
-    static int order; // order of tree
-    BNode root;  //every tree has at least a root node
+    private static int order; // Order of Tree
+    BNode root;  //Root Node
 
-    public BTree(int order) {
+    BTree(int order) {
         BTree.order = order;
-        root = new BNode(order, null);
+        root = new BNode(order, null);   //null because root node has no parent
     }
 
-    public BNode search(BNode root, int key) {
-        int i = 0;//we always want to start searching the 0th index of node.
-
-        while (i < root.count && key > root.key[i])//keep incrementing
-        //in node while key >
-        //current value.
+    private BNode search(BNode root, int key) throws IndexOutOfBoundsException {
+        /*
+        Search, searches for a given key, in a given node and all it's keys.
+        root: BNode, refers to the node where we begin start
+        key: int, the value to be searched
+        return: BNode, the node with key
+         */
+        int i = 0;
+        while (i < root.count && key > root.key[i]) // Stops where the key is found
         {
             i++;
         }
 
-        if (i <= root.count && key == root.key[i])//obviously if key is in node
-        //we went to return node.
-        {
+        if (i <= root.count && key == root.key[i]) { //marks where the key is found
             return root;
         }
 
-        if (root.leaf)//since we've already checked root
-        //if it is leaf we don't have anything else to check
-        {
+        if (root.leaf) { //if root is a leaf node, no need for further search
             return null;
-        } else//else if it is not leave recurse down through ith child
-        {
+        } else {
             return search(root.getChild(i), key);
         }
     }
 
-    public void split(BNode x, int i, BNode y) {
-        BNode z = new BNode(order, null);//gotta have extra node if we are
-        //to split.
+    private void split(BNode x, int i, BNode y) {
+        /*
+            If the bucket is full, we need to split it to insert new items
+            x: BNode, Node after which split is to be made
+            y: BNode, Node after which split is to be made
+            i: int, where in the node the split is to be done.
+        */
+        BNode z = new BNode(order, null);
 
         z.leaf = y.leaf;//set boolean to same as y
 
@@ -114,86 +115,96 @@ class BTree {
     }
 
 
-    public void nonfullInsert(BNode x, int key) {
+    private void nonfullInsert(BNode x, int key) {
+        /*
+        if the node is not full, we an directly insert keys w/o splitting
+        x: BNode, root of tree in which key is inserted
+        key: int, value to be inserted
+        */
+
         if (search(x, key) != null) {
             return;
         }
-        int i = x.count; //i is number of keys in node x
-        if (x.leaf) {
-            while (i >= 1 && key < x.key[i - 1])//here find spot to put key.
-            {
-                x.key[i] = x.key[i - 1];//shift values to make room
 
-                i--;//decrement
+        int i = x.count;
+        if (x.leaf) {
+            while (i >= 1 && key < x.key[i - 1]) // to find the appropriate place to put the key
+            {
+                x.key[i] = x.key[i - 1];//push everything one up
+
+                i--;
             }
 
-            x.key[i] = key;//finally assign value to node
-            x.count++; //increment count of keys in this node now.
+            x.key[i] = key; //adding value to node.
+            x.count++; //updating the node updates.
 
         } else {
             int j = 0;
-            while (j < x.count && key > x.key[j])//find spot to recurse
-            {                         //on correct child
+            while (j < x.count && key > x.key[j]) //Recursing to get to the right place.
+            {
                 j++;
             }
 
             if (x.child[j].count == order * 2 - 1) {
-                split(x, j, x.child[j]);//call split on node x's ith child
+                split(x, j, x.child[j]);  //splitting is full
                 if (key > x.key[j]) {
                     j++;
                 }
             }
-            nonfullInsert(x.child[j], key);//recurse
+            nonfullInsert(x.child[j], key);
         }
     }
 
     void insert(BTree t, int key) {
-        BNode r = t.root;//this method finds the node to be inserted as
-        if (search(r, key) != null) {
-            return;
-        }
+        /*
+            Actual function, that inserts data into the specifies tree.
+            t: BTree, To which the value has to be inserted.
+            key: int, value to be inserted.
+        */
+        BNode r = t.root;
 
-        //it goes through this starting at root node.
         if (r.count == 2 * order - 1)//if is full
         {
             BNode s = new BNode(order, null);//new node
-            t.root = s;    //\
-            s.leaf = false;//  \
-            //   > this is to initialize node.
-            s.count = 0;   //  /
-            s.child[0] = r;///
-            split(s, 0, r);//split root
-            nonfullInsert(s, key); //call insert method
+            t.root = s;
+            s.leaf = false;
+            s.count = 0;
+            s.child[0] = r;
+            split(s, 0, r);
+            nonfullInsert(s, key);
         } else
-            nonfullInsert(r, key);//if its not full just insert it
+            nonfullInsert(r, key);
     }
 
+    void print(BNode n, BufferedWriter bW) throws IOException {
 
-    void print(BNode n) {
         for (int i = 0; i < n.count; i++) {
-            System.out.println(n.getValue(i) + " ");//this part prints root node
+            bW.write(String.valueOf(n.getValue(i)) + "  ");
+            //System.out.print(n.getValue(i));// Printing out the value of node
         }
 
-        if (!n.leaf)//this is called when root is not leaf;
+        if (!n.leaf) // if the node is not a leaf
         {
-            for (int j = 0; j <= n.count; j++)//in this loop we recurse
-            {                  //to print out tree in
-                if (n.getChild(j) != null) //preorder fashion.
-                {              //going from left most
-                    System.out.println();      //child to right most
-                    print(n.getChild(j));     //child.
+            /*
+            Printing the tree in pre-order, i.e. from left to right
+            */
+            for (int j = 0; j <= n.count; j++) {
+                if (n.getChild(j) != null) {
+                    bW.newLine();
+                    //System.out.println();
+                    print(n.getChild(j), bW);
                 }
-            }
+                }
         }
     }
 
-    public void SearchPrintNode(BTree T, int x) {
+    public void SearchPrintNode(BTree T, int x, BufferedWriter bW) throws IOException {
         BNode temp;
         temp = search(T.root, x);
         if (temp == null) {
             System.out.println("The Key does not exist in this tree");
         } else {
-            print(temp);
+            print(temp, bW);
         }
     }
 }
@@ -207,13 +218,15 @@ public class B_Tree {
         try {
             FileReader f = new FileReader("inp.txt");        //Reading input from File
             BufferedReader bR = new BufferedReader(f);
+            FileWriter fw = new FileWriter("output.txt");
+            BufferedWriter bW = new BufferedWriter(fw);
             while ((in = bR.readLine()) != null) {
                 tree.insert(tree, Integer.parseInt(in));        //Inserting the values into the BTree
             }
+            tree.print(tree.root, bW);  //Printing the Tree to console
         } catch (IOException E) {
             System.out.println(E.toString());
         }
-        tree.print(tree.root);          //Printing the Tree to console
     }
 }
 
@@ -229,10 +242,10 @@ class inputHelp {
         try (Scanner inp = new Scanner(System.in)) {
             while (true) {
                 try {
-                    System.out.println("Enter the order of tree");
+                    System.out.println("Enter the order (>100) of tree");
                     number = inp.nextInt();                         //Asking for order (integer)
-                    if (number <= 2)
-                        throw new orderTooSmallException("Enter a number greater than 2");          //Order should not be less than 2
+                    if (number <= 99)
+                        throw new orderTooSmallException("Enter a number strictly greater than 100");          //Order should not be less than 100
                     return number;
                 } catch (InputMismatchException E) {         //Checking for integer input
                     System.out.println(E.toString());
