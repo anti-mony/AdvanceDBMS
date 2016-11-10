@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public class inputCreator {
     public static void main(String[] args) {
-        createInput("inp.txt", 100000, 10000);
+        createInput("inp.txt", 100000, 100);
     }
     public static void createInput(String fileName, int maxNumber, int numberOfNodes) {
         /*

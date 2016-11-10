@@ -7,6 +7,7 @@ import java.util.Scanner;
  * B-Tree
  * Insertion and Search (integers)
  */
+
 class BNode {
     private static int t;  //determining the order of tree
     private BNode parent;  //parent of current node.
@@ -71,7 +72,7 @@ class BTree {
         /*
             If the bucket is full, we need to split it to insert new items
             x: BNode, Node after which split is to be made
-            y: BNode, Node after which split is to be made
+            y: BNode, Node before which split is to be made
             i: int, where in the node the split is to be done.
         */
         BNode z = new BNode(order, null);
@@ -180,7 +181,7 @@ class BTree {
 
         for (int i = 0; i < n.count; i++) {
             bW.write(String.valueOf(n.getValue(i)) + "  ");
-            //System.out.print(n.getValue(i));// Printing out the value of node
+            System.out.print(n.getValue(i) + " ");// Printing out the value of node
         }
 
         if (!n.leaf) // if the node is not a leaf
@@ -191,7 +192,7 @@ class BTree {
             for (int j = 0; j <= n.count; j++) {
                 if (n.getChild(j) != null) {
                     bW.newLine();
-                    //System.out.println();
+                    System.out.println();
                     print(n.getChild(j), bW);
                 }
                 }
@@ -223,6 +224,7 @@ public class B_Tree {
             while ((in = bR.readLine()) != null) {
                 tree.insert(tree, Integer.parseInt(in));        //Inserting the values into the BTree
             }
+            tree.insert(tree, 2044);
             tree.print(tree.root, bW);  //Printing the Tree to console
         } catch (IOException E) {
             System.out.println(E.toString());
@@ -242,10 +244,10 @@ class inputHelp {
         try (Scanner inp = new Scanner(System.in)) {
             while (true) {
                 try {
-                    System.out.println("Enter the order (>100) of tree");
+                    System.out.println("Enter the order (>=150) of tree");
                     number = inp.nextInt();                         //Asking for order (integer)
-                    if (number <= 99)
-                        throw new orderTooSmallException("Enter a number strictly greater than 100");          //Order should not be less than 100
+                    if (number < 150)
+                        throw new orderTooSmallException("Enter a number strictly greater than 150");          //Order should not be less than 100
                     return number;
                 } catch (InputMismatchException E) {         //Checking for integer input
                     System.out.println(E.toString());
@@ -264,7 +266,7 @@ class inputHelp {
     }
 
     private class orderTooSmallException extends Exception {
-        /*
+        /**
         Custom Exception to check for inputs less than or equal to 2
         */
         orderTooSmallException(String s) {
