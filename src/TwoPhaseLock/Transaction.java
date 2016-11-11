@@ -1,27 +1,32 @@
-package com.main;
+/**
+ * Created by Pragya, Jaison and Sushant on 11 November 2016
+ * Two Phase Locking Protocol
+ */
+
+package TwoPhaseLock;
 
 public class Transaction {
-	public static int TS = 0;
+	private static int TS = 0;
 	// public int tid;
-	public int trans_timestamp;
-	public String trans_state;
-	public String items_locked;
+	private int trans_timestamp;
+	private String trans_state;
+	private String items_locked;
 
-	public String[] filedata = new String[100];
+	private String[] filedata = new String[100];
 
 	//Default constructor
-	public Transaction() {
+	Transaction() {
 
 	}
 
-	public Transaction(String state, String items_locked) {
+	Transaction(String state, String items_locked) {
 		this.trans_timestamp = ++TS;
 		// TS++;
 		this.trans_state = state;
 		this.items_locked = items_locked;
 	}
 
-	public void ReadTransactions() {
+	void ReadTransactions() {
 		for (int i = 0; i < mains.data.length; i++) {
 			filedata[i] = mains.data[i];
 		}
@@ -60,8 +65,8 @@ public class Transaction {
 					for (String key : mains.lockMap.keySet()) {
 
 						if (key.equals(itemname)) {
-							
-							if ((mains.lockMap.get(itemname).Get_transid_WL()) != 0) {
+
+							if ((mains.lockMap.get(itemname).getTransid_WL()) != 0) {
 								System.out.println("Item " + key
 										+ " is Writelocked and not available!"
 										+ '\n');
@@ -76,7 +81,7 @@ public class Transaction {
 								mains.lockMap.get(itemname)
 										.Set_trans_waiting_write(tid);
 							}
-							if ((mains.lockMap.get(itemname).Get_transid_RL()) != 0) {
+							if ((mains.lockMap.get(itemname).getTransid_RL()) != 0) {
 								// L.Set_transid_RL(tid);
 								mains.lockMap.get(itemname).Set_transid_RL(tid);
 								System.out.println("T" + tid
@@ -113,11 +118,11 @@ public class Transaction {
 							// if(value.transid_WL != 0)
 							// //No write lock on item
 							// {
-							if ((mains.lockMap.get(itemname1).Get_transid_WL()) != 0) {
+							if ((mains.lockMap.get(itemname1).getTransid_WL()) != 0) {
 								int timestamp_requesting_trans = mains.transMap
 										.get(tid).getTrans_timestamp();
 								int timestamp_itemHolding_trans = mains.lockMap
-										.get(itemname1).Get_transid_WL();
+										.get(itemname1).getTransid_WL();
 								// check wait-die and move transaction to
 								// queue,change state to block in transaction
 								// table
@@ -132,15 +137,15 @@ public class Transaction {
 								}
 							} else {
 								if ((mains.lockMap.get(itemname1)
-										.Get_transid_RL()) != 0)
+										.getTransid_RL()) != 0)
 								// checking if read lock already exists
 								{
 									int len_transid_RL = (int) (Math
 											.log10(mains.lockMap.get(itemname1)
-													.Get_transid_RL()) + 1);
+													.getTransid_RL()) + 1);
 									if (len_transid_RL < 2
 											&& mains.lockMap.get(itemname1)
-													.Get_transid_RL() == tid) {
+											.getTransid_RL() == tid) {
 										System.out
 												.println("T"
 														+ tid
@@ -185,17 +190,17 @@ public class Transaction {
 		}
 	}
 
-	public String getItems_locked() {
+	private String getItems_locked() {
 
 		return this.items_locked;
 	}
 
-	public String getTrans_state() {
+	private String getTrans_state() {
 
 		return this.trans_state;
 	}
 
-	public int getTrans_timestamp() {
+	private int getTrans_timestamp() {
 
 		return this.trans_timestamp;
 	}
@@ -207,27 +212,27 @@ public class Transaction {
 	// this.trans_timestamp = timestamp + 1;
 	// }
 
-	public void setItems_locked(String item) {
+	private void setItems_locked(String item) {
 		if (this.items_locked.equals("none")) {
 			this.items_locked = item;
 		} else
 			this.items_locked = this.items_locked + item;
 	}
 
-	public void setTrans_state(String state) {
+	private void setTrans_state(String state) {
 
 		this.trans_state = state;
 	}
 
-	public void enqueue(int tid) {
+	private void enqueue(int tid) {
 		mains.q.add(tid);
 	}
 
-	public void dequeue(int tid) {
+	private void dequeue(int tid) {
 		mains.q.remove(tid);
 	}
 
-	public void release(int tid) {
+	private void release(int tid) {
 		String items_locked = mains.transMap.get(tid).getItems_locked();
 
 		if (items_locked.equals("none")) {

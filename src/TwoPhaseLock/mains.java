@@ -1,4 +1,9 @@
-package com.main;
+/**
+ * Created by Pragya, Jaison and Sushant on 11 November 2016
+ * Two Phase Locking Protocol
+ */
+
+package TwoPhaseLock;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -8,10 +13,10 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class mains {
-	public static HashMap<Integer, Transaction> transMap = new HashMap<Integer, Transaction>();
-	public static HashMap<String, LockTable> lockMap = new HashMap<String, LockTable>();
-	public static Queue<Integer> q = new PriorityQueue<Integer>();
-	public static String[] data = new String[20];
+	static HashMap<Integer, Transaction> transMap = new HashMap<>();
+	static HashMap<String, LockTable> lockMap = new HashMap<>();
+	static Queue<Integer> q = new PriorityQueue<>();
+	static String[] data = new String[20];
 
 	public static void main(String args[]) {
 
@@ -23,15 +28,15 @@ public class mains {
 
 	}
 
-	public String[] ReadFile() {
+	private String[] ReadFile() {
 
 		// reading file line by line in Java using BufferedReader
-		FileInputStream fis = null;
-		BufferedReader reader = null;
+		FileInputStream fis;
+		BufferedReader reader;
 		String[] myarray;
 		myarray = new String[20];
 		try {
-			fis = new FileInputStream("C:/Users/Manu/workspace/DB2/input.txt");
+			fis = new FileInputStream("input.txt");
 			reader = new BufferedReader(new InputStreamReader(fis));
 			int i = 0;
 			String line = reader.readLine();
