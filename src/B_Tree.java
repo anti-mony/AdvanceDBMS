@@ -224,7 +224,7 @@ public class B_Tree {
             while ((in = bR.readLine()) != null) {
                 tree.insert(tree, Integer.parseInt(in));        //Inserting the values into the BTree
             }
-            tree.insert(tree, 2044);
+            //tree.insert(tree, 2044);
             tree.print(tree.root, bW);  //Printing the Tree to console
         } catch (IOException E) {
             System.out.println(E.toString());
