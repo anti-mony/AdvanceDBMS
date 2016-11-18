@@ -5,18 +5,20 @@
 
 package TwoPhaseLock;
 
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.io.*;
 
 public class mains {
-	static HashMap<Integer, Transaction> transMap = new HashMap<>();
-	static HashMap<String, LockTable> lockMap = new HashMap<>();
-	static Queue<Integer> q = new PriorityQueue<>();
-	static String[] data = new String[20];
+	public static HashMap<Integer, Transaction> transMap = new HashMap<Integer, Transaction>();
+	public static HashMap<String, LockTable> lockMap = new HashMap<String, LockTable>();
+	public static Queue<Integer> q = new PriorityQueue<Integer>();
+	public static String[] data = new String[20];
 
 	public static void main(String args[]) {
 
@@ -28,20 +30,23 @@ public class mains {
 
 	}
 
-	private String[] ReadFile() {
+	public String[] ReadFile() {
 
 		// reading file line by line in Java using BufferedReader
-		FileInputStream fis;
-		BufferedReader reader;
+		//FileInputStream fis = null;
+		//BufferedReader reader = null;
 		String[] myarray;
-		myarray = new String[20];
+		myarray = new String[100];
 		try {
-			fis = new FileInputStream("input.txt");
-			reader = new BufferedReader(new InputStreamReader(fis));
+			FileReader fis =new FileReader("C:/Users/pragya/workspace/TwoPhaseLock/src/input.txt");
+            BufferedReader reader = new BufferedReader(fis);
+			
 			int i = 0;
 			String line = reader.readLine();
+			
 
 			while (line != null) {
+				System.out.println("input : " + line);
 				myarray[i] = line;
 				line = reader.readLine();
 				i++;
@@ -50,7 +55,7 @@ public class mains {
 		}
 
 		catch (Exception e) {
-			System.out.println("Error");
+			System.out.println("Error"+ e.toString());
 		}
 		return myarray;
 	}
