@@ -1,38 +1,40 @@
+package TwoPhaseLock;
+
 /**
  * Created by Pragya, Jaison and Sushant on 11 November 2016
  * Two Phase Locking Protocol
  */
 
-public class LockTransaction {
+class LockTransaction {
 	
 	/*
 	 The fields to be stored in TT are, 
-	 • Transaction_ID 
-	 • Transaction_state (active, blocked/waiting, aborted/cancelled, committed) 
-	 • Transaction_timestamp 
-	 • List of items locked by the transaction
+	 ï¿½ Transaction_ID 
+	 ï¿½ Transaction_state (active, blocked/waiting, aborted/cancelled, committed) 
+	 ï¿½ Transaction_timestamp 
+	 ï¿½ List of items locked by the transaction
 	 */
-	
-	public static int TS = 0; //count no of transaction
-	public int transaction_timestamp; //transaction time stamp
-	public String transaction_state; // transaction state
-	public String items_locked; //count of items locked
 
-	public String[] filedata = new String[100]; //store file data
+	private static int TS = 0; //count no of transaction
+	private int transaction_timestamp; //transaction time stamp
+	private String transaction_state; // transaction state
+	private String items_locked; //count of items locked
+
+	private String[] filedata = new String[100]; //store file data
 
 	//Default constructor
-	public LockTransaction() {
+	LockTransaction() {
 
 	}
 
 	//Constructor to instantiate time stamp,state and no of items locked 
-	public LockTransaction(String state, String items_locked) {
+	private LockTransaction(String state, String items_locked) {
 		this.transaction_timestamp = ++TS;
 		this.transaction_state = state;
 		this.items_locked = items_locked;
 	}
 
-	public void ProcessTransaction() {
+	void ProcessTransaction() {
 		/*
 		 The input file contains list of transactions,possible operations are:
 		 b (begin transaction), r (read item), w (write item), e (end transaction).
@@ -184,25 +186,25 @@ public class LockTransaction {
 	}
 
 	//get method locked item
-	public String getItems_locked() {
+	private String getItems_locked() {
 
 		return this.items_locked;
 	}
 
 	// get method for transaction state
-	public String getTrans_state() {
+	private String getTrans_state() {
 
 		return this.transaction_state;
 	}
 
 	//get method for timestamp
-	public int getTrans_timestamp() {
+	private int getTrans_timestamp() {
 
 		return this.transaction_timestamp;
 	}
 	
 	//set method for item lock
-	public void setItems_locked(String item) {
+	private void setItems_locked(String item) {
 		if (this.items_locked.equals("none")) {
 			this.items_locked = item;
 		} else
@@ -210,13 +212,13 @@ public class LockTransaction {
 	}
 
 	//set method for transaction state
-	public void setTrans_state(String state) {
+	private void setTrans_state(String state) {
 
 		this.transaction_state = state;
 	}
 
 	//enqueue in the priority queue 
-	public void enqueue(int tid) {
+	private void enqueue(int tid) {
 		TwoPhaseLock.priortyQ.add(tid);
 	}
 
@@ -226,7 +228,7 @@ public class LockTransaction {
 	}
 
 	//release locks from the transactions and Commit the transaction
-	public void release(int tid) {
+	private void release(int tid) {
 		String items_locked = TwoPhaseLock.mapTransaction.get(tid).getItems_locked();
 
 		if (items_locked.equals("none")) {

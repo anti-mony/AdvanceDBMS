@@ -1,28 +1,28 @@
+package TwoPhaseLock;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.HashMap;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * Created by Pragya, Jaison and Sushant on 11 November 2016
  * Two Phase Locking Protocol
  */
 
-import java.io.BufferedReader;
-import java.util.HashMap;
-import java.util.PriorityQueue;
-import java.util.Queue;
-import java.io.*;
-
-
-
-
-/** Class with main method to read the input from file
- * and call the function for excecution of Transactions
- */
 public class TwoPhaseLock {
-	
-	public static HashMap<Integer, LockTransaction> mapTransaction = new HashMap<Integer, LockTransaction>(); //Hash map for Transaction table TT
-	public static HashMap<String, LockTable> mapLocks = new HashMap<String, LockTable>();  //Hash map for Lock table LT
-	
-	public static Queue<Integer> priortyQ = new PriorityQueue<Integer>(); //PriorityQueue to store the waiting transactions
-	public static String[] data = new String[20]; // Strings from the input file
+
+	/**
+	 * Class with main method to read the input from file
+	 * and call the function for execution of Transactions
+	 */
+
+	static HashMap<Integer, LockTransaction> mapTransaction = new HashMap<Integer, LockTransaction>(); //Hash map for Transaction table TT
+	static HashMap<String, LockTable> mapLocks = new HashMap<String, LockTable>();  //Hash map for Lock table LT
+
+	static Queue<Integer> priortyQ = new PriorityQueue<>(); //PriorityQueue to store the waiting transactions
+	static String[] data = new String[20]; // Strings from the input file
 
 	public static void main(String args[]) {
 
@@ -36,7 +36,7 @@ public class TwoPhaseLock {
 
 	}
 
-	public String[] InputReader() {
+	private String[] InputReader() {
 		
 		/*
 		 Opens the input file and reads line by line

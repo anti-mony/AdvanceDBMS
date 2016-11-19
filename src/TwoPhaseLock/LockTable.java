@@ -1,13 +1,14 @@
+package TwoPhaseLock;
 
-public class LockTable
+class LockTable
 {
-	public int transid_WL;
-	public int transid_RL;	
-	public int trans_waiting_read;
-	public int trans_waiting_write;
+	private int transid_WL;
+	private int transid_RL;
+	private int trans_waiting_read;
+	private int trans_waiting_write;
 
 	//Constructor
-	public LockTable()
+	LockTable()
 	{		
 		this.transid_WL = 0;
 		this.transid_RL = 0;
@@ -17,24 +18,27 @@ public class LockTable
 
 
 	//........................Get.............................................
-	public int Get_transid_RL() {
+	int Get_transid_RL() {
 		
 			return this.transid_RL;
 		}
-	public int Get_transid_WL() {
+
+	int Get_transid_WL() {
 		
 			return this.transid_WL;
 		}
-	public int Get_trans_waiting_read() {
+
+	int Get_trans_waiting_read() {
 		
 			return this.trans_waiting_read;
 		}
-	public int Get_trans_waiting_write() {
+
+	int Get_trans_waiting_write() {
 		
 			return this.trans_waiting_write;
 		}
 	//..........................Set.............................................
-	public void Set_transid_WL(int x) {
+	void Set_transid_WL(int x) {
 		
 			this.transid_WL=x;
 		}
@@ -44,22 +48,22 @@ public class LockTable
 		y = Integer.toString(this.trans_waiting_read) + Integer.toString(x);
 		this.trans_waiting_read = Integer.parseInt(y);
 		}
-	
-	public void Set_transid_RL(int x) {
+
+	void Set_transid_RL(int x) {
 		
 		String y;
 		y = Integer.toString(this.transid_RL) + Integer.toString(x);
 		this.transid_RL = Integer.parseInt(y);
 		}
-	
-	public void Set_trans_waiting_write(int x) {
+
+	void Set_trans_waiting_write(int x) {
 		
 		String y;
 		y = Integer.toString(this.trans_waiting_write) + Integer.toString(x);
 		this.trans_waiting_write= Integer.parseInt(y);
 		}
 	//.....................Remove..............................................
-	public void replace_transid_RL()
+	void replace_transid_RL()
 	{
 		this.transid_RL = 0;
 	}
