@@ -44,7 +44,7 @@ class BTree {
         root = new BNode(order, null);   //null because root node has no parent
     }
 
-    private BNode search(BNode root, int key) throws IndexOutOfBoundsException {
+    private int search(BNode root, int key) throws IndexOutOfBoundsException {
         /*
         Search, searches for a given key, in a given node and all it's keys.
         root: BNode, refers to the node where we begin start
@@ -58,11 +58,11 @@ class BTree {
         }
 
         if (i <= root.count && key == root.key[i]) { //marks where the key is found
-            return root;
+            return root.key[i];
         }
 
         if (root.leaf) { //if root is a leaf node, no need for further search
-            return null;
+            return -1;
         } else {
             return search(root.getChild(i), key);
         }
@@ -123,7 +123,7 @@ class BTree {
         key: int, value to be inserted
         */
 
-        if (search(x, key) != null) {
+        if (search(x, key) > 0) {
             return;
         }
 
@@ -199,13 +199,14 @@ class BTree {
         }
     }
 
-    public void SearchPrintNode(BTree T, int x, BufferedWriter bW) throws IOException {
-        BNode temp;
+    public void SearchPrintNode(BTree T, int x) throws IOException {
+        int temp = -1;
         temp = search(T.root, x);
-        if (temp == null) {
+        if (temp < 0) {
             System.out.println("The Key does not exist in this tree");
         } else {
-            print(temp, bW);
+            System.out.println();
+            System.out.println("Integer Found : " + temp);
         }
     }
 }
@@ -215,7 +216,7 @@ public class B_Tree {
         inputHelp iH = new inputHelp();  //Helper Class to take input from user
         String in;
         BTree tree = new BTree(iH.orderInput());//  B-Tree Tree with order  N is created.
-
+        int menu = 0, val, sval;
         try {
             FileReader f = new FileReader("inp.txt");        //Reading input from File
             BufferedReader bR = new BufferedReader(f);
@@ -224,8 +225,35 @@ public class B_Tree {
             while ((in = bR.readLine()) != null) {
                 tree.insert(tree, Integer.parseInt(in));        //Inserting the values into the BTree
             }
-            //tree.insert(tree, 2044);
-            tree.print(tree.root, bW);  //Printing the Tree to console
+
+            while (menu != -1) {
+                System.out.println(" What do you want to do! ");
+                System.out.println("1. Insert");
+                System.out.println("2. Print Tree");
+                System.out.println("3. Search");
+                System.out.println("4. Enter -1 to exit");
+                menu = inputHelp.inp.nextInt();
+                switch (menu) {
+                    case 1:
+                        System.out.println("Enter the value you want to insert");
+                        val = inputHelp.inp.nextInt();
+                        tree.insert(tree, val);
+                        System.out.println("Successfully Inserted");
+                        break;
+                    case 2:
+                        tree.print(tree.root, bW);
+                        break;
+                    case 3:
+                        System.out.println("Enter the value you want to insert");
+                        sval = inputHelp.inp.nextInt();
+                        tree.SearchPrintNode(tree, sval);  //Printing the Tree to console
+                        break;
+                    case -1:
+                        break;
+                    default:
+                        System.out.println("Please enter a valid input");
+                }
+            }
         } catch (IOException E) {
             System.out.println(E.toString());
         }
@@ -233,7 +261,7 @@ public class B_Tree {
 }
 
 class inputHelp {
-
+    static Scanner inp = new Scanner(System.in);
     int orderInput() {
         /*
         * To take order of tree as input
@@ -241,18 +269,18 @@ class inputHelp {
         * returns: int, order of B-Tree
         */
         int number;
-        try (Scanner inp = new Scanner(System.in)) {
+        try {
             while (true) {
                 try {
-                    System.out.println("Enter the order (>=150) of tree");
+                    System.out.println("Enter the order (>=128) of tree");
                     number = inp.nextInt();                         //Asking for order (integer)
-                    if (number < 150)
-                        throw new orderTooSmallException("Enter a number strictly greater than 150");          //Order should not be less than 100
+                    if (number < 128)
+                        throw new orderTooSmallException("Enter a number strictly greater than 128");          //Order should not be less than 100
                     return number;
                 } catch (InputMismatchException E) {         //Checking for integer input
                     System.out.println(E.toString());
                     System.out.print(" --> Please Enter an integer <--");
-                    inp.next();
+                    inp.nextInt();
                 } catch (orderTooSmallException E) {        // Order too small
                     System.out.println(E.toString());
                 }
