@@ -6,4 +6,7 @@
 Binary Search Tree, insert and search.
 With input and output to file.
 
+##### Assignment 2:
+Two phase locking protocol with Wait-Die Scheme.
+
 
