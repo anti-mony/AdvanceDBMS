@@ -40,8 +40,8 @@ class LockTransaction {
 		 b (begin transaction), r (read item), w (write item), e (end transaction).
 		 of the form ' r1(X) ' where 1 is the transactionID, X is item name
 		 */
-		
-		for (int i = 0; i < TwoPhaseLock.data.length; i++) {    // read data from input file and store in filedata[]
+
+		for (int i = 0; i < TwoPhaseLock.data.length; i++) {    // read data from input file and store in an array filedata[]
 			filedata[i] = TwoPhaseLock.data[i];
 		}
 		int i = 0;
