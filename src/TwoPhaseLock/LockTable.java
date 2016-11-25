@@ -1,5 +1,11 @@
 package TwoPhaseLock;
 
+/**
+ * Created by Pragya [1410110454], Jaison[1410110169] and Sushant[1410110454] on 11 November 2016
+ * Two Phase Locking Protocol, with Wait-Die Method
+ * Reads Transactions from a file and processes them accordingly.
+ */
+
 class LockTable {
     private int transid_WL;
     private int transid_RL;
