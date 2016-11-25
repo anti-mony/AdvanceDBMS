@@ -2,7 +2,7 @@ package TwoPhaseLock;
 
 /**
  * Created by Pragya, Jaison and Sushant on 11 November 2016
- * Two Phase Locking Protocol
+ * Two Phase Locking Protocol,
  */
 
 class LockTransaction {
@@ -53,7 +53,7 @@ class LockTransaction {
 				LockTransaction T = new LockTransaction("Active", "none");  //begin transaction 
 				int tid = Integer.parseInt(filedata[i].substring(1,filedata[i].indexOf(";")));
 				TwoPhaseLock.mapTransaction.put(tid, T);
-				System.out.println("Start Transaction: T" + tid);
+				System.out.println("Starting Transaction: T" + tid + " .");
 				
 				break;
 
@@ -69,7 +69,7 @@ class LockTransaction {
 				try{
 					if (!TwoPhaseLock.mapLocks.containsKey(itemname)) {
 						TwoPhaseLock.mapLocks.put(itemname, L);
-						System.out.println("T" + tid + " has a read lock on item "+ itemname + '\n');
+						System.out.println("T" + tid + " locking the item " + itemname + " in read mode \n");
 						TwoPhaseLock.mapTransaction.get(tid).setItems_locked(itemname); //item read locked
 					} 
 					else {
@@ -85,7 +85,7 @@ class LockTransaction {
 								}
 								if ((TwoPhaseLock.mapLocks.get(itemname).Get_transid_RL()) != 0) { //item had a read lock
 									TwoPhaseLock.mapLocks.get(itemname).Set_transid_RL(tid);
-									System.out.println("T" + tid+ " has a read lock on item "+ itemname + '\n');
+									System.out.println("T" + tid + " locking the item " + itemname + " in read mode \n");
 									TwoPhaseLock.mapTransaction.get(tid).setItems_locked(itemname);
 								}							
 							}
@@ -113,7 +113,7 @@ class LockTransaction {
 				try{
 						if (!TwoPhaseLock.mapLocks.containsKey(itemname1)) { //item had a write lock
 							TwoPhaseLock.mapLocks.put(itemname1, L1);
-							System.out.println("T" + tid + " has a write lock on item "+ itemname1 + '\n');
+							System.out.println("T" + tid + " write locked the item " + itemname1 + '\n');
 						} else {
 							for (String key : TwoPhaseLock.mapLocks.keySet()) {
 								if (key.equals(itemname1)) {
@@ -237,7 +237,7 @@ class LockTransaction {
 			TwoPhaseLock.mapTransaction.get(tid).replaceItems_locked();
 			TwoPhaseLock.mapTransaction.get(tid).setItems_locked("none");
 			TwoPhaseLock.mapTransaction.get(tid).setTrans_state("Committed");
-			System.out.println("All items released by the transaction T" + tid);
+			//System.out.println("All items released by the transaction T" + tid);
 			TwoPhaseLock.priortyQ.remove(tid);
 		}
 	}

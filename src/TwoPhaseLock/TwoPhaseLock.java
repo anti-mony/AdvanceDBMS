@@ -5,17 +5,19 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Scanner;
 
 /**
  * Created by Pragya, Jaison and Sushant on 11 November 2016
  * Two Phase Locking Protocol, with Wait-Die Method
+ * Reads Transactions from a file and processes them accordingly.
  */
 
 public class TwoPhaseLock {
 
 	/**
-	 * Class with main method to read the input from file
-	 * and call the function for execution of Transactions
+	 * Main method class which reads the input from file
+	 * and call the function to process transactions.
 	 */
 
 	static HashMap<Integer, LockTransaction> mapTransaction = new HashMap<Integer, LockTransaction>(); //Hash map for Transaction table TT
@@ -43,7 +45,10 @@ public class TwoPhaseLock {
 		 inp: String, input file name containing transactions.
 		 return: String, the output file as a single character array, or a string.
 		 */
-		
+		int chck = 0;
+		Scanner S = new Scanner(System.in);
+		System.out.println("Do you want to view the input file! 1/0 ");
+		chck = S.nextInt();
 		String[] myarray;
 		myarray = new String[100];
 		
@@ -54,9 +59,11 @@ public class TwoPhaseLock {
 			
 			int i = 0;
 			String line = reader.readLine();
-			System.out.println("Input file: \n");
+			if (chck == 1)
+				System.out.println("Input file: \n");
 			while (line != null) {
-				System.out.println(line);
+				if (chck == 1)
+					System.out.println(line);
 				myarray[i] = line;
 				line = reader.readLine();
 				i++;
