@@ -5,11 +5,16 @@ This program implements the behaviour of the two-phase locking(2PL) protocol for
 
 The input is the file which has each line as a single transaction operation. The opssible operations are: b(begin transaction), r(read item) and e(end transation). Each operation will be followed by an integer transaction id and data item between parentheses.
 
-
+ Usage
+ 
+Add he set of transactions to the file "transactions.txt", in the source directory. 
+Complile TwoPhaseLock.java using javac or any other java IDE. 
+Run the TwoPhaseLock class.
+** No Arguments Passed via command line ** 
 
  Design and Implementation
 
-1. Data structures keep of transactions(transaction table) : transaction id, transaction timestamp, transaction state (active,blocked,aborted), list of items locked by the transaction
+1.Data structures keep of transactions(transaction table) : transaction id, transaction timestamp, transaction state (active,blocked,aborted), list of items locked by the transaction
 and
 lock(lock table) : item name, lock state(read lock or write lock),transaction id for the transaction holding the lock,list of transaction ids for transactions waiting for the item to be unlocked
  
