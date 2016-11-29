@@ -5,6 +5,10 @@ This program implements the behaviour of the two-phase locking(2PL) protocol for
 
 The input is the file which has each line as a single transaction operation. The opssible operations are: b(begin transaction), r(read item) and e(end transation). Each operation will be followed by an integer transaction id and data item between parentheses.
 
+The input file contains list of transactions,possible operations are:
+		 b (begin transaction), r (read item), w (write item), e (end transaction).
+		 of the form ' r1(X) ' where 1 is the transactionID, X is item name
+
  Usage
  
 Add he set of transactions to the file "transactions.txt", in the source directory. 
